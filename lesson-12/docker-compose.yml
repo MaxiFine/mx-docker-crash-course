@@ -7,7 +7,7 @@ services:
     # networks:
     #   - react_api
     ports:
-      - 4000:4000
+      - 4500:4500
     volumes:
       - ./api:/app
       - /app/node_modules
@@ -17,7 +17,7 @@ services:
     # image: myblog:1.5
     container_name: myblog_c2
     ports:
-      - 3000:3000
+      - 3500:3500
     # stdin_open: true
     # tty: true
 
