@@ -1,0 +1,23 @@
+# version: "3.8"
+services:
+  api:
+    build: ./api
+    # image: myapi:1.5
+    container_name: api_c
+    # networks:
+    #   - react_api
+    ports:
+      - 4000:4000
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+      # - /mnt/c/Users/MaxwellAdomako/devops/docker-crash-course/api/node_modules:/app/node_modules
+  myblog_fe:
+    build: ./myblog
+    # image: myblog:1.5
+    container_name: myblog_c2
+    ports:
+      - 3000:3000
+    # stdin_open: true
+    # tty: true
+
