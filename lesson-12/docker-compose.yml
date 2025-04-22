@@ -2,8 +2,9 @@
 services:
   api:
     build: ./api
+    image: backend-api:1.5
     # image: myapi:1.5
-    container_name: api_c
+    container_name: node-react_api
     # networks:
     #   - react_api
     ports:
@@ -13,9 +14,11 @@ services:
       - /app/node_modules
       # - /mnt/c/Users/MaxwellAdomako/devops/docker-crash-course/api/node_modules:/app/node_modules
   myblog_fe:
-    build: ./myblog
-    # image: myblog:1.5
-    container_name: myblog_c2
+    build:
+      context: ./myblog
+      dockerfile: Dockerfile
+    image: myblog-frontend:1.5
+    container_name: myblog_frontend
     ports:
       - 3500:3500
     # stdin_open: true
