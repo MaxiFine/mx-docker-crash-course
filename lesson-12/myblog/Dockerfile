@@ -1,5 +1,8 @@
 FROM node:17-alpine
 
+# watching the container for changes
+RUN npm install -g nodemon
+
 WORKDIR /app
 
 COPY package.json ./
