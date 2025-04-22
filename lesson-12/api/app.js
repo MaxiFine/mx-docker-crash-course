@@ -9,7 +9,7 @@ app.get('/', (req, res) => {
   res.json([
     {
       "id":"1",
-      "title":"Book Review: The Name of the Wind"
+      "title":"Book Review: The Name of the Rain"
     },
     {
       "id":"2",
@@ -18,6 +18,26 @@ app.get('/', (req, res) => {
     {
       "id":"3",
       "title":"Show Review: Alice in Borderland"
+    },
+    {
+      "id":"4",
+      "title":"Movie Review: The Batman"
+    },
+    {
+      "id":"5",
+      "title":"Book Review: The Hobbit"
+    },
+    {
+      "id":"6",
+      "title":"Game Review: God of War"
+    },
+    {
+      "id":"7",
+      "title":"Show Review: Stranger Things"
+    },
+    {
+      "id":"8",
+      "title":"Movie Review: Inception"
     }
   ])
 })

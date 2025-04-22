@@ -1,10 +1,11 @@
 FROM node:17-alpine
 
+# TO CONNECT VOLUME TO CONTAINER
 RUN npm install -g nodemon
 
 WORKDIR /app
 
-COPY package.json .
+COPY package.json ./
 
 RUN npm install
 
