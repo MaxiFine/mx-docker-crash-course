@@ -3,10 +3,9 @@ services:
   api:
     build: ./api
     image: backend-api:1.5
-    # image: myapi:1.5
+ 
     container_name: node-react_api
-    # networks:
-    #   - react_api
+  
     ports:
       - 4500:4500
     volumes:
