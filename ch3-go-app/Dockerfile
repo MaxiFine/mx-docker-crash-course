@@ -15,6 +15,6 @@ RUN GOOS=linux go build -a -installsuffix cgo -o app . && chmod +x ./app
 # Stage 2
 FROM gcr.io/distroless/base
 WORKDIR /tmp
-COPY -from=build /tmp/app .
+COPY --from=build /tmp/app .
 CMD [ "./app" ]
 
