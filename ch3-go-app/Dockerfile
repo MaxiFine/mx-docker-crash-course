@@ -1,5 +1,3 @@
-
-
 # DISTROLESS APPROACH
 FROM golang:1.12.4 AS build
 WORKDIR /tmp
