@@ -3,14 +3,13 @@ services:
   api:
     build: ./api
     image: backend-api:1.5
- 
     container_name: node-react_api
-  
     ports:
       - 4500:4500
     volumes:
       - ./api:/app
       - /app/node_modules
+
   myblog_fe:
     build:
       context: ./myblog
@@ -19,4 +18,3 @@ services:
     container_name: myblog_frontend
     ports:
       - 3500:3500
-
