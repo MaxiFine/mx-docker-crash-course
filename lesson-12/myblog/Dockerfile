@@ -11,8 +11,7 @@ RUN npm install
 
 COPY . .
 
-# EXPOSE 3000
-# required for docker desktop port mapping
+# espose by compose file...
 
 CMD ["npm", "start"]
 # CMD [ "node", "app.js" ]
