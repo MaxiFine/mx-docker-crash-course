@@ -1,0 +1,4 @@
+.dockerignore
+
+# Ignore all files
+lesson-12/.dockerignore
