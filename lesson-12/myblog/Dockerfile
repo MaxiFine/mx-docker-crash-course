@@ -12,7 +12,7 @@ RUN npm install
 COPY . .
 
 # espose by compose file...
-EXPOSE 3500
+# EXPOSE 3500
 
 CMD ["npm", "start"]
 # CMD [ "node", "app.js" ]
