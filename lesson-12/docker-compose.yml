@@ -2,7 +2,7 @@
 services:
   api:
     build: ./api
-    image: backend-api:1.5
+    image: backend-api:1.1
     container_name: node-react_api
     ports:
       - 4500:4500
@@ -14,7 +14,7 @@ services:
     build:
       context: ./myblog
       dockerfile: Dockerfile
-    image: myblog-frontend:1.5
+    image: myblog-frontend:1.1
     container_name: myblog_frontend
     ports:
       - 3500:3500
