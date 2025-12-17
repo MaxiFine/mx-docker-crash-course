@@ -2,12 +2,13 @@
 services:
   api:
     build: ./api
+    dockerfile: Dockerfile 
     image: backend-api:1.5
-    container_name: node-react_api
+    container_name: node-react_api-container
     ports:
       - 4500:4500
     volumes:
-      - ./api:/app
+      - ./api:/app/data
       - /app/node_modules
   myblog_fe:
     build:
