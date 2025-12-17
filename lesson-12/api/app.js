@@ -43,6 +43,6 @@ app.get('/', (req, res) => {
 })
 
 app.listen(4500, () => {
-  console.log('listening for requests on port 4500..........')
+  console.log('listening to port 4500..........')
 })
 
