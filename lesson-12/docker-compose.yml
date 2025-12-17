@@ -5,8 +5,7 @@ services:
     image: backend-api:1.1
     container_name: node-react_api
     ports:
-      # - 4500:4500
-      - 5000:5000
+      - 4500:4500
     volumes:
       - ./api:/app
       - /app/node_modules
@@ -16,7 +15,6 @@ services:
     networks:
       - lesson-12-network
 
-
   myblog_fe:
     build:
       context: ./myblog
@@ -25,9 +23,6 @@ services:
     container_name: myblog_frontend
     ports:
       - 3500:3500
-    # volumes:
-    #   - ./myblog:/app
-    #   - /app/node_modules
 
     # React properties starts the container in an interactive mode
     stdin_open: true
