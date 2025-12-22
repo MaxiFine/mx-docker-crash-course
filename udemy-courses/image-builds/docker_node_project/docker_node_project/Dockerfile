@@ -21,3 +21,13 @@ EXPOSE 3000
 
 # Run the application
 CMD ["node", "app.js"]
+
+
+#######################################
+## REBUILDING THE DOCKER IMAGE INTO A MULTI-STAGE BUILD
+#######################################
+FROM node:latest
+# Maintainer information
+LABEL author="test.main@gmail.com"
+# Install Node.js and npm
+RUN apk update && apk add nodejs npm
