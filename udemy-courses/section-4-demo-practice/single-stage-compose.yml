@@ -18,6 +18,9 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./node_project:/usr/app
-    command: node app.js
+    # Mounting the entire project directory to reflect changes in real-time
+      - ./node_project/:/usr/app
+    # mounting node_modules to avoid overwriting by the host volume added above.
+      - /usr/app/node_modules
+
 
