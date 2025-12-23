@@ -4,7 +4,8 @@ LABEL author="test.main@gmail.com"
 
 WORKDIR /usr/app
 
-COPY package*.json ./
+# Specifying paths relative to the WORKDIR and packaging only necessary files
+COPY ./node_project/* /usr/app/
 RUN npm install
 
 COPY . .
