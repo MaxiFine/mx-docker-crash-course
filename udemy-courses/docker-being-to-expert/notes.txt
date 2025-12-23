@@ -1,0 +1,4 @@
+## INTERACTING THE CONTAINER DIRECTLY FROM HOST TERMINAL
+
+docker exec -it nginx-container cat /usr/share/nginx/html/index.htm
+

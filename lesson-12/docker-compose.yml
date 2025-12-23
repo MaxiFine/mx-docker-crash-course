@@ -5,12 +5,16 @@ services:
     image: backend-api:1.1
     container_name: node-react_api
     ports:
-      # - 4500:4500
-      - 5000:5000
+      - 4500:4500
     volumes:
       - ./api:/app
       - /app/node_modules
     command: npm run dev
+
+    # Networking to be created later
+    networks:
+      - lesson-12-network
+
   myblog_fe:
     build:
       context: ./myblog
@@ -19,3 +23,16 @@ services:
     container_name: myblog_frontend
     ports:
       - 3500:3500
+
+    # React properties starts the container in an interactive mode
+    stdin_open: true
+    tty: true
+
+
+    networks:
+      - lesson-12-network
+
+# Define the custom network
+networks:
+  lesson-12-network:
+    driver: bridge
