@@ -1,0 +1,22 @@
+## Stage 1 Build
+FROM node:20 AS builder
+LABEL author="test.main@gmail.com"
+WORKDIR /usr/app
+COPY ./node_project/* /usr/app
+RUN npm install
+RUN npm install -g typescript nodemon mocha
+RUN npm run build
+
+# Stage 2
+FROM node:20-alpine AS runner
+WORKDIR /app
+
+# We copy essential files
+COPY --from=builder /usr/app/*.json /app
+COPY --from=builder /usr/app/node_modules /app
+COPY --from=builder /usr/app/app.js /app
+
+EXPOSE 300
+ENTRYPOINT [ "node" ]
+CMD [ "app.js" ]
+
