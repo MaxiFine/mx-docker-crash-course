@@ -18,3 +18,8 @@
 
 - Created 2 networks and 2 containers each in a separate network, tried pinging but it didn't work which means separate custom networks cannot communicate unless configured to do so unlike the default network.
 
+# DOCKER COMPOSE
+
+- Can be used to manage multi-containers docker apps in one file
+- Run the apps with one one command
+- makes runing complex docker setups easy
