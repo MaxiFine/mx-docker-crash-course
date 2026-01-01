@@ -10,6 +10,10 @@
 - Action: installed the ping utility in the container before pinging was possible.
 **utility installation cmd:  apt-get install iputil-ping -y**
 
+# Why Using Ports
+
+- networks are isolated and can't comm with internet, but the host have assess to the internet, so this way a port is openned so that throught the host/default bridge, the container can assess the internet through the open port by the host.
+
 # CREATING ISOLATED NETWORKS AND HOW TO CONFIGURE THEM TO COMMUICATE WITH EACH OTHER
 
 - Created 2 networks and 2 containers each in a separate network, tried pinging but it didn't work which means separate custom networks cannot communicate unless configured to do so unlike the default network.

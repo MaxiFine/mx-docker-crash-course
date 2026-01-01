@@ -1,0 +1,25 @@
+services:
+  web:
+    image: nginx:latest
+    hostname: my-nginx-server  # Custom hostname for the web service
+    ports:
+      - "8080:80"
+    volumes:
+      - ./html:/usr/share/nginx/html:ro
+    networks:
+      - app-webnetwork
+  
+  db:
+    image: postgres:17
+    hostname: my-postgres-db
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+
+    networks:
+      - app-webnetwork
+
+networks:
+  app-webnetwork:
+    driver: bridge
