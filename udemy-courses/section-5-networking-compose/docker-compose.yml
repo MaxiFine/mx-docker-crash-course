@@ -1,7 +1,8 @@
 services:
   web:
     image: nginx:latest
-    hostname: my-nginx-server  # Custom hostname for the web service
+    hostname: my-nginx-server  # Custom hostname for the web service -it shell
+    container_name: nginx-cont-1
     ports:
       - "8080:80"
     volumes:
@@ -11,7 +12,8 @@ services:
   
   db:
     image: postgres:17
-    hostname: my-postgres-db
+    hostname: postgres-db  # custom hostname for the db service
+    container_name: postgres-cont-1
     environment:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword

@@ -5,3 +5,7 @@ lesson-12/.dockerignore
 prometheus-grafana/.dockerignore
 prometheus-grafana/data/grafana/*
 prometheus-grafana/data/*
+
+udemy-courses/networking-compose/.dockerignore
+udemy-courses/networking-compose/data/*
+udemy-courses/networking-compose/.env
