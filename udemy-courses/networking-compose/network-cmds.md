@@ -17,6 +17,8 @@
 # CREATING ISOLATED NETWORKS AND HOW TO CONFIGURE THEM TO COMMUICATE WITH EACH OTHER
 
 - Created 2 networks and 2 containers each in a separate network, tried pinging but it didn't work which means separate custom networks cannot communicate unless configured to do so unlike the default network.
+- Common solution to resolve isolated network communications configs is using docker compose to easily connect them. 
+
 
 # DOCKER COMPOSE
 
