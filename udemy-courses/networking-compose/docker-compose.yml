@@ -4,9 +4,10 @@ services:
     hostname: my-nginx-server  # Custom hostname for the web service -it shell
     container_name: nginx-cont-1
     ports:
-      - "8080:80"
-    volumes:
-      - ./html:/usr/share/nginx/html:ro
+      - "8086:80"
+    # To mount a local directory as a volume with nginx html files
+    # volumes:
+    #   - ./html:/usr/share/nginx/html:ro
     networks:
       - app-webnetwork
   
@@ -15,9 +16,9 @@ services:
     hostname: postgres-db  # custom hostname for the db service
     container_name: postgres-cont-1
     environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydatabase
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
 
     networks:
       - app-webnetwork
