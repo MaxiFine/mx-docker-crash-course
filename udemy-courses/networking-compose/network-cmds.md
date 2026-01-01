@@ -26,3 +26,10 @@
 - Run the apps with one one command
 - makes runing complex docker setups easy
 - allows dynamic configurations of multiple container together
+
+
+# Troubleshooting
+
+- docker exec -it nginx-cont-1 ls -l /usr/share/nginx/html
+to exec and list contents of the config files.
+
