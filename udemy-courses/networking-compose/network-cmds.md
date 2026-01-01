@@ -25,3 +25,4 @@
 - Can be used to manage multi-containers docker apps in one file
 - Run the apps with one one command
 - makes runing complex docker setups easy
+- allows dynamic configurations of multiple container together
