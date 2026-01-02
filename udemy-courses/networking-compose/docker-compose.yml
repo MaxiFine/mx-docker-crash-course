@@ -1,0 +1,28 @@
+services:
+  web:
+    image: nginx:latest
+    hostname: my-nginx-server  # Custom hostname for the web service -it shell
+    container_name: nginx-cont-1
+    ports:
+      - "8084:80"
+    # To mount a local directory as a volume with nginx html files
+    volumes:
+      - ./html:/usr/share/nginx/html:ro  # read-only mode
+    networks:
+      - app-webnetwork
+  
+  db:
+    image: postgres:17
+    hostname: postgres-db  # custom hostname for the db service
+    container_name: postgres-cont-1
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+    networks:
+      - app-webnetwork
+
+networks:
+  app-webnetwork:
+    driver: bridge
