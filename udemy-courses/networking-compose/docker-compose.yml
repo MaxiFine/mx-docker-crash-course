@@ -9,7 +9,17 @@ services:
     volumes:
       - ./html:/usr/share/nginx/html:ro  # read-only mode
     networks:
-      - app-webnetwork
+      # - app-
+      - frontend-network
+
+  backend-api:
+    image: node:latest
+    hostname: node-backend-api  # custom hostname for the backend-api service
+    container_name: node-backend-cont-api
+    
+    networks:
+        # - app-webnetwork
+        - backend-network
   
   db:
     image: postgres:17
@@ -21,8 +31,12 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
 
     networks:
-      - app-webnetwork
+      # - app-webnetwork
+      - frontend-network
+      - backend-network
 
 networks:
-  app-webnetwork:
+  frontend-network:
+    driver: bridge
+  backend-network:
     driver: bridge
