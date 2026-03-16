@@ -15,6 +15,7 @@ services:
     image: node:latest
     hostname: node-backend-api  # custom hostname for the backend-api service
     container_name: node-backend-cont-api
+    command: ["sh", "-c", "while true: do sleep 3600; done"]  # Keep the container running
     networks:
         - backend-network
   
