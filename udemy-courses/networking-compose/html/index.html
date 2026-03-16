@@ -4,23 +4,24 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Docker Nginx Network Demo</title>
+    <title>Nginx Ops Console</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap"
       rel="stylesheet"
     >
     <style>
       :root {
-        --bg-1: #09203f;
-        --bg-2: #1f3c88;
-        --accent: #00d4ff;
-        --accent-2: #ffd166;
-        --text-main: #f5f7ff;
-        --text-soft: #d8deff;
-        --panel: rgba(9, 15, 43, 0.64);
-        --panel-border: rgba(255, 255, 255, 0.16);
+        --bg: #05070b;
+        --panel: rgba(8, 13, 22, 0.88);
+        --panel-border: rgba(60, 226, 255, 0.28);
+        --line: rgba(112, 126, 164, 0.26);
+        --text: #d8e1f8;
+        --muted: #8d9dbe;
+        --cyan: #3ce2ff;
+        --green: #57f287;
+        --amber: #ffd36f;
       }
 
       * {
@@ -30,15 +31,18 @@
       body {
         margin: 0;
         min-height: 100vh;
-        display: grid;
-        place-items: center;
-        padding: 24px;
-        color: var(--text-main);
-        font-family: "Outfit", "Segoe UI", sans-serif;
+        padding: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Chakra Petch", "Segoe UI", sans-serif;
+        color: var(--text);
+        background-color: var(--bg);
         background:
-          radial-gradient(circle at 18% 20%, rgba(255, 209, 102, 0.24), transparent 38%),
-          radial-gradient(circle at 85% 12%, rgba(0, 212, 255, 0.22), transparent 30%),
-          linear-gradient(140deg, var(--bg-1), var(--bg-2));
+          radial-gradient(circle at 8% 5%, rgba(60, 226, 255, 0.16), transparent 38%),
+          radial-gradient(circle at 88% 14%, rgba(87, 242, 135, 0.15), transparent 35%),
+          radial-gradient(circle at 50% 115%, rgba(255, 211, 111, 0.14), transparent 35%),
+          linear-gradient(180deg, #070b13, #04060b 48%, #020305);
         overflow-x: hidden;
       }
 
@@ -51,129 +55,211 @@
       }
 
       body::before {
-        background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-        background-size: 42px 42px;
-        mask-image: radial-gradient(circle at center, black 45%, transparent 90%);
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(255, 255, 255, 0.02) 0,
+          rgba(255, 255, 255, 0.02) 1px,
+          transparent 1px,
+          transparent 3px
+        );
+        opacity: 0.45;
       }
 
       body::after {
-        background: radial-gradient(circle at center, transparent, rgba(0, 0, 0, 0.5));
+        background: radial-gradient(circle at center, transparent, rgba(0, 0, 0, 0.78));
       }
 
-      .card {
+      .console {
         position: relative;
-        width: min(760px, 100%);
+        width: min(900px, 100%);
         background: var(--panel);
         border: 1px solid var(--panel-border);
-        border-radius: 22px;
-        padding: 34px;
-        backdrop-filter: blur(7px);
-        box-shadow: 0 22px 70px rgba(2, 6, 25, 0.5);
-        animation: rise 0.85s ease-out both;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow:
+          0 0 0 1px rgba(60, 226, 255, 0.18),
+          0 26px 75px rgba(0, 0, 0, 0.6),
+          inset 0 0 40px rgba(0, 0, 0, 0.35);
+        animation: boot 0.8s ease-out both;
       }
 
-      .tag {
-        width: fit-content;
-        margin: 0 0 16px;
-        padding: 6px 12px;
-        border-radius: 999px;
-        border: 1px solid rgba(255, 255, 255, 0.24);
+      .console::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(110deg, transparent 42%, rgba(60, 226, 255, 0.08) 50%, transparent 58%);
+        transform: translateX(-125%);
+        animation: sweep 4.8s linear infinite;
+        pointer-events: none;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .lights {
+        display: flex;
+        gap: 7px;
+      }
+
+      .lights span {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+      }
+
+      .lights span:nth-child(1) {
+        background: #ff6d6d;
+      }
+
+      .lights span:nth-child(2) {
+        background: #ffd36f;
+      }
+
+      .lights span:nth-child(3) {
+        background: #57f287;
+      }
+
+      .title {
+        font-family: "IBM Plex Mono", monospace;
+        color: var(--muted);
+        font-size: 0.82rem;
         letter-spacing: 0.08em;
-        font-size: 0.74rem;
-        font-family: "Space Mono", monospace;
         text-transform: uppercase;
-        color: var(--text-soft);
+      }
+
+      .clock {
+        font-family: "IBM Plex Mono", monospace;
+        color: var(--cyan);
+        font-size: 0.82rem;
+      }
+
+      .body {
+        padding: 24px;
       }
 
       h1 {
-        margin: 0 0 12px;
-        font-size: clamp(1.9rem, 4vw, 3rem);
-        line-height: 1.12;
+        margin: 0;
+        font-size: clamp(1.6rem, 3.8vw, 2.65rem);
+        letter-spacing: 0.02em;
+        line-height: 1.15;
       }
 
       .lead {
-        margin: 0;
-        font-size: clamp(1rem, 2vw, 1.2rem);
-        color: var(--text-soft);
-        max-width: 58ch;
+        margin: 8px 0 0;
+        color: var(--muted);
+        max-width: 63ch;
       }
 
-      .stats {
+      .grid {
+        margin-top: 22px;
         display: grid;
-        gap: 12px;
-        margin-top: 22px;
-        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        grid-template-columns: 1.12fr 1fr;
+        gap: 14px;
       }
 
-      .stat {
-        border-radius: 14px;
-        background: rgba(255, 255, 255, 0.07);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        padding: 12px 14px;
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        background: rgba(255, 255, 255, 0.02);
+        padding: 14px;
       }
 
-      .label {
-        font-size: 0.72rem;
-        letter-spacing: 0.06em;
+      .panel-title {
+        margin: 0 0 10px;
+        font-family: "IBM Plex Mono", monospace;
+        color: var(--cyan);
+        letter-spacing: 0.05em;
         text-transform: uppercase;
-        color: rgba(245, 247, 255, 0.78);
-        font-family: "Space Mono", monospace;
+        font-size: 0.78rem;
       }
 
-      .value {
-        margin-top: 4px;
-        font-size: 1.06rem;
-        font-weight: 700;
+      .kv {
+        list-style: none;
+        padding: 0;
+        margin: 0;
       }
 
-      .status {
-        margin-top: 22px;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        color: #e9fff5;
+      .kv li {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 8px 0;
+        border-bottom: 1px dashed rgba(141, 157, 190, 0.22);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.88rem;
+      }
+
+      .kv li:last-child {
+        border-bottom: none;
+      }
+
+      .kv .key {
+        color: var(--muted);
+      }
+
+      .kv .val {
+        color: var(--text);
         font-weight: 600;
       }
 
-      .dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background: #39d98a;
-        box-shadow: 0 0 0 0 rgba(57, 217, 138, 0.6);
-        animation: pulse 1.9s ease-out infinite;
+      .log {
+        margin: 0;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.84rem;
+        line-height: 1.65;
+        color: #b9c8eb;
       }
 
-      .actions {
-        margin-top: 26px;
+      .log .ok {
+        color: var(--green);
+      }
+
+      .log .warn {
+        color: var(--amber);
+      }
+
+      .status {
+        margin-top: 16px;
         display: flex;
-        flex-wrap: wrap;
+        align-items: center;
         gap: 10px;
+        font-family: "IBM Plex Mono", monospace;
       }
 
-      .btn {
-        border: none;
+      .dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 0 0 rgba(87, 242, 135, 0.7);
+        animation: ping 1.8s ease-out infinite;
+      }
+
+      .cta {
+        margin-top: 18px;
+        display: inline-block;
+        border: 1px solid rgba(60, 226, 255, 0.5);
         border-radius: 10px;
-        padding: 10px 14px;
-        font: 600 0.92rem/1 "Outfit", sans-serif;
+        padding: 9px 13px;
+        color: var(--cyan);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        background: rgba(60, 226, 255, 0.08);
       }
 
-      .btn.primary {
-        background: linear-gradient(120deg, var(--accent), #56f2ff);
-        color: #001027;
-      }
-
-      .btn.secondary {
-        background: transparent;
-        color: var(--text-main);
-        border: 1px solid rgba(255, 255, 255, 0.22);
-      }
-
-      @keyframes rise {
+      @keyframes boot {
         from {
           opacity: 0;
-          transform: translateY(18px) scale(0.99);
+          transform: translateY(16px) scale(0.99);
         }
         to {
           opacity: 1;
@@ -181,63 +267,88 @@
         }
       }
 
-      @keyframes pulse {
-        0% {
-          box-shadow: 0 0 0 0 rgba(57, 217, 138, 0.6);
-        }
-        75% {
-          box-shadow: 0 0 0 14px rgba(57, 217, 138, 0);
-        }
+      @keyframes sweep {
         100% {
-          box-shadow: 0 0 0 0 rgba(57, 217, 138, 0);
+          transform: translateX(125%);
         }
       }
 
-      @media (max-width: 620px) {
-        .card {
-          padding: 24px;
+      @keyframes ping {
+        0% {
+          box-shadow: 0 0 0 0 rgba(87, 242, 135, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 12px rgba(87, 242, 135, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(87, 242, 135, 0);
+        }
+      }
+
+      @media (max-width: 820px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 560px) {
+        body {
+          padding: 12px;
         }
 
-        .actions {
-          flex-direction: column;
+        .body {
+          padding: 16px;
         }
 
-        .btn {
-          width: 100%;
+        .topbar {
+          padding: 12px;
+        }
+
+        .clock {
+          display: none;
         }
       }
     </style>
   </head>
   <body>
-    <main class="card">
-      <p class="tag">networking-compose demo</p>
-      <h1>Hello from Nginx inside Docker</h1>
-      <p class="lead">
-        This page is mounted from your host machine using a read-only volume, proving
-        your web container is running and serving local files exactly as intended.
-      </p>
+    <main class="console">
+      <header class="topbar">
+        <div class="lights" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="title">Nginx Ops Console / networking-compose</div>
+        <div class="clock">port 8084 :: localhost</div>
+      </header>
 
-      <section class="stats" aria-label="Service summary">
-        <article class="stat">
-          <div class="label">Web Service</div>
-          <div class="value">nginx-cont-1</div>
-        </article>
-        <article class="stat">
-          <div class="label">Published Port</div>
-          <div class="value">8084 -> 80</div>
-        </article>
-        <article class="stat">
-          <div class="label">Network</div>
-          <div class="value">app-webnetwork</div>
-        </article>
+      <section class="body">
+        <h1>Container online. Host volume mounted.</h1>
+        <p class="lead">
+          This interface confirms your Nginx service is alive, reachable from the host, and
+          serving files directly from your local html directory through Docker Compose.
+        </p>
+
+        <div class="grid">
+          <article class="panel" aria-label="Service metadata">
+            <h2 class="panel-title">service metadata</h2>
+            <ul class="kv">
+              <li><span class="key">container</span><span class="val">nginx-cont-1</span></li>
+              <li><span class="key">image</span><span class="val">nginx:latest</span></li>
+              <li><span class="key">mapping</span><span class="val">8084 -> 80</span></li>
+              <li><span class="key">network</span><span class="val">app-webnetwork</span></li>
+              <li><span class="key">volume</span><span class="val">./html -> /usr/share/nginx/html (ro)</span></li>
+            </ul>
+          </article>
+
+          <article class="panel" aria-label="Runtime logs">
+            <h2 class="panel-title">runtime events</h2>
+            <pre class="log">[12:01:07] <span class="ok">ok</span> compose stack initialized
+[12:01:08] <span class="ok">ok</span> nginx worker process started
+[12:01:10] <span class="ok">ok</span> static index delivered from mounted volume
+[12:01:12] <span class="warn">note</span> db service isolated unless shared network exists</pre>
+          </article>
+        </div>
+
+        <p class="status"><span class="dot" aria-hidden="true"></span>status: healthy and serving traffic</p>
+        <span class="cta" aria-hidden="true">docker compose up -d</span>
       </section>
-
-      <p class="status"><span class="dot" aria-hidden="true"></span>Container is up and responding</p>
-
-      <div class="actions" aria-hidden="true">
-        <button class="btn primary" type="button">Docker Compose Running</button>
-        <button class="btn secondary" type="button">Volume Mount Active</button>
-      </div>
     </main>
   </body>
 </html>
