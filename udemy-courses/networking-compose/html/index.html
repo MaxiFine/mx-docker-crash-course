@@ -4,10 +4,240 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nginx is working</title>
+    <title>Docker Nginx Network Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    >
+    <style>
+      :root {
+        --bg-1: #09203f;
+        --bg-2: #1f3c88;
+        --accent: #00d4ff;
+        --accent-2: #ffd166;
+        --text-main: #f5f7ff;
+        --text-soft: #d8deff;
+        --panel: rgba(9, 15, 43, 0.64);
+        --panel-border: rgba(255, 255, 255, 0.16);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        color: var(--text-main);
+        font-family: "Outfit", "Segoe UI", sans-serif;
+        background:
+          radial-gradient(circle at 18% 20%, rgba(255, 209, 102, 0.24), transparent 38%),
+          radial-gradient(circle at 85% 12%, rgba(0, 212, 255, 0.22), transparent 30%),
+          linear-gradient(140deg, var(--bg-1), var(--bg-2));
+        overflow-x: hidden;
+      }
+
+      body::before,
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      body::before {
+        background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        background-size: 42px 42px;
+        mask-image: radial-gradient(circle at center, black 45%, transparent 90%);
+      }
+
+      body::after {
+        background: radial-gradient(circle at center, transparent, rgba(0, 0, 0, 0.5));
+      }
+
+      .card {
+        position: relative;
+        width: min(760px, 100%);
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        border-radius: 22px;
+        padding: 34px;
+        backdrop-filter: blur(7px);
+        box-shadow: 0 22px 70px rgba(2, 6, 25, 0.5);
+        animation: rise 0.85s ease-out both;
+      }
+
+      .tag {
+        width: fit-content;
+        margin: 0 0 16px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        letter-spacing: 0.08em;
+        font-size: 0.74rem;
+        font-family: "Space Mono", monospace;
+        text-transform: uppercase;
+        color: var(--text-soft);
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        font-size: clamp(1.9rem, 4vw, 3rem);
+        line-height: 1.12;
+      }
+
+      .lead {
+        margin: 0;
+        font-size: clamp(1rem, 2vw, 1.2rem);
+        color: var(--text-soft);
+        max-width: 58ch;
+      }
+
+      .stats {
+        display: grid;
+        gap: 12px;
+        margin-top: 22px;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      }
+
+      .stat {
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        padding: 12px 14px;
+      }
+
+      .label {
+        font-size: 0.72rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: rgba(245, 247, 255, 0.78);
+        font-family: "Space Mono", monospace;
+      }
+
+      .value {
+        margin-top: 4px;
+        font-size: 1.06rem;
+        font-weight: 700;
+      }
+
+      .status {
+        margin-top: 22px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: #e9fff5;
+        font-weight: 600;
+      }
+
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #39d98a;
+        box-shadow: 0 0 0 0 rgba(57, 217, 138, 0.6);
+        animation: pulse 1.9s ease-out infinite;
+      }
+
+      .actions {
+        margin-top: 26px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .btn {
+        border: none;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font: 600 0.92rem/1 "Outfit", sans-serif;
+      }
+
+      .btn.primary {
+        background: linear-gradient(120deg, var(--accent), #56f2ff);
+        color: #001027;
+      }
+
+      .btn.secondary {
+        background: transparent;
+        color: var(--text-main);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(18px) scale(0.99);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(57, 217, 138, 0.6);
+        }
+        75% {
+          box-shadow: 0 0 0 14px rgba(57, 217, 138, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(57, 217, 138, 0);
+        }
+      }
+
+      @media (max-width: 620px) {
+        .card {
+          padding: 24px;
+        }
+
+        .actions {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+        }
+      }
+    </style>
   </head>
   <body>
-    <h1>Hello from Docker Nginx 🚀</h1>
-    <h1>Serving Index from host using docker Volumes Docker Nginx 🚀</h1>
+    <main class="card">
+      <p class="tag">networking-compose demo</p>
+      <h1>Hello from Nginx inside Docker</h1>
+      <p class="lead">
+        This page is mounted from your host machine using a read-only volume, proving
+        your web container is running and serving local files exactly as intended.
+      </p>
+
+      <section class="stats" aria-label="Service summary">
+        <article class="stat">
+          <div class="label">Web Service</div>
+          <div class="value">nginx-cont-1</div>
+        </article>
+        <article class="stat">
+          <div class="label">Published Port</div>
+          <div class="value">8084 -> 80</div>
+        </article>
+        <article class="stat">
+          <div class="label">Network</div>
+          <div class="value">app-webnetwork</div>
+        </article>
+      </section>
+
+      <p class="status"><span class="dot" aria-hidden="true"></span>Container is up and responding</p>
+
+      <div class="actions" aria-hidden="true">
+        <button class="btn primary" type="button">Docker Compose Running</button>
+        <button class="btn secondary" type="button">Volume Mount Active</button>
+      </div>
+    </main>
   </body>
 </html>
