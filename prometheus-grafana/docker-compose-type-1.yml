@@ -58,7 +58,7 @@ services:
       ports:
         - 9113:9113
       networks:
-        - monitoring
+        - monitoring-config-networks
 
 # Grafana service configuration
   grafana:
@@ -74,7 +74,7 @@ services:
       - GF_SERVER_ROOT_URL=http://localhost:3000
       # - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/
     networks:
-      - monitoring
+      - monitoring-config-networks
 
 volumes:
   prometheus_data: {}
