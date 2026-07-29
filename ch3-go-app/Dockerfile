@@ -9,4 +9,3 @@ FROM gcr.io/distroless/base
 WORKDIR /tmp
 COPY --from=build /tmp/app .
 CMD [ "./app" ]
-

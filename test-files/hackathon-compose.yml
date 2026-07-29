@@ -1,0 +1,90 @@
+# The Midnight Pager - sample application stack
+#
+# Five services on one Docker network: a status dashboard (frontend), an
+# orders API (backed by Postgres), an inventory API, a background
+# notifications worker, and Postgres itself.
+
+networks:
+  midnight-pager-net:
+    driver: bridge
+
+volumes:
+  postgres-data:
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    networks:
+      - midnight-pager-net
+    environment:
+      - POSTGRES_DB=orders
+      - POSTGRES_USER=orders_api
+      - POSTGRES_PASSWORD=orders_api_password
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orders_api -d orders"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    # No `ports:` mapping - same pattern as notifications-worker: only
+    # reachable from other containers on midnight-pager-net, never exposed
+    # to the host or the internet. Inspect it via SSM +
+    # `docker compose exec postgres psql -U orders_api -d orders`.
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:8080"
+    networks:
+      - midnight-pager-net
+    environment:
+      - PORT=8080
+      - ORDERS_API_URL=http://orders-api:8081
+      - INVENTORY_API_URL=http://inventory-api:8082
+      - NOTIFICATIONS_HEALTH_URL=http://notifications-worker:9090/health
+    depends_on:
+      - orders-api
+      - inventory-api
+      - notifications-worker
+
+  orders-api:
+    build: ./orders-api
+    ports:
+      - "8081:8081"
+    networks:
+      - midnight-pager-net
+    env_file:
+      - ./orders-api/.env
+    environment:
+      - PORT=8081
+      - INVENTORY_API_URL=http://inventory-api:8082
+    depends_on:
+      inventory-api:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+    restart: always
+
+  inventory-api:
+    build: ./inventory-api
+    ports:
+      - "8082:8082"
+    networks:
+      - midnight-pager-net
+    environment:
+      - PORT=8082
+    restart: always
+
+  notifications-worker:
+    build: ./notifications-worker
+    networks:
+      - midnight-pager-net
+    environment:
+      - HEALTH_PORT=9090
+      - LOG_INTERVAL_MS=2000
+    # No `ports:` mapping here - this service is unreachable from the host;
+    # only other containers on midnight-pager-net (e.g. frontend) can reach
+    # its internal health endpoint on port 9090.
+
+    
